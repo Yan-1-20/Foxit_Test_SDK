@@ -1,0 +1,66 @@
+﻿Build started 10/30/2014 5:49:08 AM.
+     1>Project "C:\work\SDK_Test\Foxit_SDK_Test\PDF_SDK_Test\sdktest\sdktest.vcxproj" on node 2 (rebuild target(s)).
+     1>_PrepareForClean:
+         Deleting file "Debug\sdktest.lastbuildstate".
+       InitializeBuildStatus:
+         Touching "Debug\sdktest.unsuccessfulbuild".
+       ClCompile:
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"Debug\sdktest.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"Debug\sdktest.pch" /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt sdktest.cpp sdktestDlg.cpp src\fgsdk_common.cpp src\PDFConverter.cpp src\PDFDocHandle.cpp src\PDFImageHandle.cpp
+         PDFImageHandle.cpp
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfimagehandle.cpp(1): warning C4627: '#include "../include/PDFImageHandle.h"': skipped when looking for precompiled header use
+                 Add directive to 'StdAfx.h' or rebuild precompiled header
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfimagehandle.cpp(2): warning C4627: '#include "../include/PDFDocHandle.h"': skipped when looking for precompiled header use
+                 Add directive to 'StdAfx.h' or rebuild precompiled header
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfimagehandle.cpp(3): warning C4627: '#include "../../include/pdf/fpdf_extstd.h"': skipped when looking for precompiled header use
+                 Add directive to 'StdAfx.h' or rebuild precompiled header
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfimagehandle.cpp(5): warning C4627: '#include <string>': skipped when looking for precompiled header use
+                 Add directive to 'StdAfx.h' or rebuild precompiled header
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfimagehandle.cpp(6): warning C4627: '#include <iostream>': skipped when looking for precompiled header use
+                 Add directive to 'StdAfx.h' or rebuild precompiled header
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfimagehandle.cpp(81): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "StdAfx.h"' to your source?
+         PDFDocHandle.cpp
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfdochandle.cpp(1): warning C4627: '#include "../include/PDFDocHandle.h"': skipped when looking for precompiled header use
+                 Add directive to 'StdAfx.h' or rebuild precompiled header
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfdochandle.cpp(2): warning C4627: '#include "../../include/pdf/fpdf_extstd.h"': skipped when looking for precompiled header use
+                 Add directive to 'StdAfx.h' or rebuild precompiled header
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfdochandle.cpp(4): warning C4627: '#include <string>': skipped when looking for precompiled header use
+                 Add directive to 'StdAfx.h' or rebuild precompiled header
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfdochandle.cpp(5): warning C4627: '#include <iostream>': skipped when looking for precompiled header use
+                 Add directive to 'StdAfx.h' or rebuild precompiled header
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfdochandle.cpp(464): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "StdAfx.h"' to your source?
+         PDFConverter.cpp
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfconverter.cpp(1): warning C4627: '#include "../include/PDFConverter.h"': skipped when looking for precompiled header use
+                 Add directive to 'StdAfx.h' or rebuild precompiled header
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfconverter.cpp(2): warning C4627: '#include "../include/PDFDocHandle.h"': skipped when looking for precompiled header use
+                 Add directive to 'StdAfx.h' or rebuild precompiled header
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfconverter.cpp(3): warning C4627: '#include "../../include/pdf/fpdf_extstd.h"': skipped when looking for precompiled header use
+                 Add directive to 'StdAfx.h' or rebuild precompiled header
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfconverter.cpp(5): warning C4627: '#include <string>': skipped when looking for precompiled header use
+                 Add directive to 'StdAfx.h' or rebuild precompiled header
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfconverter.cpp(6): warning C4627: '#include <iostream>': skipped when looking for precompiled header use
+                 Add directive to 'StdAfx.h' or rebuild precompiled header
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\pdfconverter.cpp(368): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "StdAfx.h"' to your source?
+         fgsdk_common.cpp
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\fgsdk_common.cpp(15): warning C4627: '#include "../include/fgsdk_common.h"': skipped when looking for precompiled header use
+                 Add directive to 'StdAfx.h' or rebuild precompiled header
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\src\fgsdk_common.cpp(2003): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "StdAfx.h"' to your source?
+         sdktestDlg.cpp
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\include\fgsdk_common.h(31): warning C4005: '_WIN32_WINNT' : macro redefinition
+                 c:\program files (x86)\microsoft sdks\windows\v7.0a\include\sdkddkver.h(197) : see previous definition of '_WIN32_WINNT'
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\sdktestdlg.cpp(249): warning C4101: 'ret' : unreferenced local variable
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\sdktestdlg.cpp(292): warning C4101: 'ret' : unreferenced local variable
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\sdktestdlg.cpp(335): warning C4101: 'ret' : unreferenced local variable
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\sdktestdlg.cpp(378): warning C4101: 'ret' : unreferenced local variable
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\sdktestdlg.cpp(421): warning C4101: 'ret' : unreferenced local variable
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\sdktestdlg.cpp(463): warning C4101: 'ret' : unreferenced local variable
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\sdktestdlg.cpp(505): warning C4101: 'ret' : unreferenced local variable
+     1>c:\work\sdk_test\foxit_sdk_test\pdf_sdk_test\sdktest\sdktestdlg.cpp(547): warning C4101: 'ret' : unreferenced local variable
+         sdktest.cpp
+         Generating Code...
+     1>Done Building Project "C:\work\SDK_Test\Foxit_SDK_Test\PDF_SDK_Test\sdktest\sdktest.vcxproj" (rebuild target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:16.84
