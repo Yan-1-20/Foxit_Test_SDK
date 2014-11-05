@@ -8,11 +8,10 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-FS_RESULT GetBitmapByRenderer(string testfile, FS_INT32 imageType);
+FS_RESULT GetBitmapByRenderer(string testfile, FS_INT32 imageType, int QA);
 FSCRT_IMAGE GetImageFromMemory(string filename);
 int ImgGeneratePDF(FSCRT_IMAGE image, int rotateangle);
-FS_RESULT DeleteAndSave(string filename);
-void getbitmapInfo(string bitmapName);
+
 
 
 const int IMG_2_PDF = 1;
@@ -34,34 +33,49 @@ FS_RESULT PDFConverter::Generate(string strFileName, int type)
 	case IMG_2_PDF:
 		ret = PDFConverter::GeneratePDF(strFileName, 0);
 		break;
+
 	case IMG_2_PDF_R90:
 		ret = PDFConverter::GeneratePDF(strFileName, 90);
 		break;
+
 	case IMG_2_PDF_R180:
 		ret = PDFConverter::GeneratePDF(strFileName, 180);
 		break;
+
 	case IMG_2_PDF_R270:
 		ret = PDFConverter::GeneratePDF(strFileName, 270);;
-		break;
-	case PDF_2_TIF:
-		ret = PDFConverter::GenerateImage(strFileName, FSCRT_IMAGETYPE_TIF);;
-		break;
-	case PDF_2_BMP:
-		ret = PDFConverter::GenerateImage(strFileName, FSCRT_IMAGETYPE_BMP);;
-		break;
-	case PDF_2_PNG:
-		ret = PDFConverter::GenerateImage(strFileName, FSCRT_IMAGETYPE_PNG);;
-		break;
-	case PDF_2_JPG:
-		ret = PDFConverter::GenerateImage(strFileName, FSCRT_IMAGETYPE_JPG);
-		break;
-	case PDF_2_JPX:
-		ret = PDFConverter::GenerateImage(strFileName, FSCRT_IMAGETYPE_JPX);
 		break;
 	}
 	return ret;
 }
 
+FS_RESULT PDFConverter::Generate_QA_Img(string strFileName, int type, int QA)
+{
+	FS_RESULT ret = false;
+	switch (type)
+	{
+		case PDF_2_TIF:
+			ret = PDFConverter::GenerateImage(strFileName, FSCRT_IMAGETYPE_TIF, QA);
+			break;
+
+		case PDF_2_BMP:
+			ret = PDFConverter::GenerateImage(strFileName, FSCRT_IMAGETYPE_BMP, QA);
+			break;
+
+		case PDF_2_PNG:
+			ret = PDFConverter::GenerateImage(strFileName, FSCRT_IMAGETYPE_PNG, QA);
+			break;
+
+		case PDF_2_JPG:
+			ret = PDFConverter::GenerateImage(strFileName, FSCRT_IMAGETYPE_JPG, QA);
+			break;
+
+		case PDF_2_JPX:
+			ret = PDFConverter::GenerateImage(strFileName, FSCRT_IMAGETYPE_JPX, QA);
+			break;
+	}
+	return ret;
+}
 
 FS_RESULT PDFConverter::GeneratePDF(string strFileName, int rotateangle)
 {
@@ -70,19 +84,15 @@ FS_RESULT PDFConverter::GeneratePDF(string strFileName, int rotateangle)
 	return true;
 }
 
-FS_RESULT PDFConverter::GenerateImage(string strFile, FS_INT32 imageType)
+FS_RESULT PDFConverter::GenerateImage(string strFile, FS_INT32 imageType, int QA)
 {
 
-	FS_RESULT res = GetBitmapByRenderer(strFile, imageType);
+	FS_RESULT res = GetBitmapByRenderer(strFile, imageType, QA);
 	return res;
 }
 
 
-
-
-
-
-FS_RESULT PageToBitmap(FSCRT_PAGE page, FS_INT32 imagetype)
+FS_RESULT PageToBitmap(FSCRT_PAGE page, FS_INT32 imagetype, int QA)
 {
 	FSCRT_BITMAP m_bitmap;
 	//Get the given page's size.
@@ -94,8 +104,8 @@ FS_RESULT PageToBitmap(FSCRT_PAGE page, FS_INT32 imagetype)
 		return ret;
 	}
 
-	width  = width * 200 / 72.0f + 0.5f;
-	height = height * 200 / 72.0f + 0.5f;
+	width  = width * QA / 72.0f + 0.5f;
+	height = height * QA / 72.0f + 0.5f;
 
 	//Get a bmp handler to hold bmp data from rendering progress.
 	ret = FSCRT_Bitmap_Create((FS_INT32)width, (FS_INT32)height, FSCRT_BITMAPFORMAT_24BPP_RGB, NULL, 0, &m_bitmap);
@@ -216,7 +226,7 @@ FS_RESULT PageToBitmap(FSCRT_PAGE page, FS_INT32 imagetype)
 	FSPDF_RenderContext_Release(rendercontext);
 	return ret;
 }
-FS_RESULT GetBitmapByRenderer(string testfile, FS_INT32 imagetype)
+FS_RESULT GetBitmapByRenderer(string testfile, FS_INT32 imagetype, int QA)
 {
 	string strFile = testfile;
 	FSCRT_FILE file = FSDK_OpenFile(strFile.c_str(), "rb");
@@ -238,7 +248,7 @@ FS_RESULT GetBitmapByRenderer(string testfile, FS_INT32 imagetype)
 		return ret;
 	}
 
-	PageToBitmap(page, imagetype);
+	PageToBitmap(page, imagetype, QA);
 
 	FSPDF_Doc_Close(doc);
 	return ret;

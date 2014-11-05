@@ -8,7 +8,7 @@
 #include <stdio.h>
 
 
-FS_RESULT DeleteAndSave(string filename);
+FS_RESULT DeleteAndSave(string filename, int DN);
 FS_RESULT trimPDF(string strFile);
 FS_RESULT GenerateEncryptPDF(string strFile);
 void SetDocInfo(string pdfName);
@@ -25,9 +25,6 @@ FS_RESULT PDFDocHandler::DocHandle(string strFileName, int type)
 {
 	FS_RESULT ret = false;
 	switch (type){
-		case Delete_a_Page:
-			ret = PDFDocHandler::DeletePage(strFileName);
-			break;
 
 		case Is_a_PDFA:
 			ret = PDFDocHandler::IsPDFA(strFileName);
@@ -54,10 +51,17 @@ FS_RESULT PDFDocHandler::DocHandle(string strFileName, int type)
 
 }
 
-FS_RESULT PDFDocHandler::DeletePage(string strFile)
+FS_RESULT PDFDocHandler::DocHandle_Delete(string strFileName, int DN)
+{
+	FS_RESULT ret = false;
+	ret = PDFDocHandler::DeletePage(strFileName, DN);
+	return ret;
+}
+
+FS_RESULT PDFDocHandler::DeletePage(string strFile, int DN)
 {
 
-	FS_RESULT res = DeleteAndSave(strFile);
+	FS_RESULT res = DeleteAndSave(strFile, DN);
 	return res;
 }
 
@@ -188,7 +192,7 @@ FS_RESULT PDFDocHandler::GetColorSpace(string strFile)
 }
 
 
-FS_RESULT DeleteAndSave(string filename)
+FS_RESULT DeleteAndSave(string filename, int  DN)
 {
 	FSCRT_DOCUMENT doc;
 	string strFile = filename;
@@ -215,7 +219,7 @@ FS_RESULT DeleteAndSave(string filename)
 		PDFDocHandler PageDelete;
 		ret = PageDelete.LoadPage(doc, i, &page);
 		FS_RESULT ret_1 = FSCRT_ERRCODE_ERROR;// delete a page
-		if (i==0)  
+		if (i==DN)  
 		{
 			ret_1 = FSPDF_Page_Delete(page);
 			if (FSCRT_ERRCODE_SUCCESS != ret_1)
@@ -239,6 +243,7 @@ FS_RESULT DeleteAndSave(string filename)
 	{
 		printf("Failure: Fail to save a PDF files!\n");
 	}
+
 
 	FSPDF_Doc_Close(doc);
 	return ret;

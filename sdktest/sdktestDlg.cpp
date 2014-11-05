@@ -1,4 +1,4 @@
-
+﻿
 // sdktestDlg.cpp : implementation file
 //
 
@@ -71,7 +71,6 @@ BEGIN_MESSAGE_MAP(CsdktestDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BTN_TIF2PDF, &CsdktestDlg::OnBnClickedBtnImg2pdf)
-	ON_WM_DESTROY()
 	ON_BN_CLICKED(IDC_BTN_PDF2TIFF, &CsdktestDlg::OnBnClickedBtnPdf2tiff)
 	ON_BN_CLICKED(IDC_BTN_DELETEPAGE, &CsdktestDlg::OnBnClickedBtnDeletepage)
 	ON_BN_CLICKED(IDC_BTN_ISPDFA, &CsdktestDlg::OnBnClickedBtnIspdfa)
@@ -87,6 +86,10 @@ BEGIN_MESSAGE_MAP(CsdktestDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_GetEncrypt, &CsdktestDlg::OnBnClickedBtnGetencrypt)
 	ON_BN_CLICKED(IDC_BTN_PDFCS, &CsdktestDlg::OnBnClickedBtnPdfcs)
 	ON_BN_CLICKED(IDC_BTN_SGDoc, &CsdktestDlg::OnBnClickedBtnSgdoc)
+	ON_WM_DESTROY()
+	
+	ON_CBN_DROPDOWN(IDC_COMBO3, &CsdktestDlg::OnCbnDropdownCombo3)
+	ON_CBN_DROPDOWN(IDC_COMBO5, &CsdktestDlg::OnCbnDropdownCombo5)
 END_MESSAGE_MAP()
 
 
@@ -207,7 +210,13 @@ void CsdktestDlg::OnBnClickedBtnImg2pdf()
 		CT2CA pszConvertedAnsiString (str);
 		std::string strStd (pszConvertedAnsiString);	
 		PDFConverter test;
+
 		test.Generate(strStd, 1);
+		ShellExecute(this->m_hWnd,_T("open"),_T("output.pdf"),NULL,NULL, SW_SHOW );
+		//Finalize PDF module.
+		FSDK_PDFModule_Finalize();
+		//Finalize SDK library.
+		FSDK_FinalizeLibrary();
 	}
 	fileName.ReleaseBuffer();
 }
@@ -247,12 +256,23 @@ void CsdktestDlg::OnBnClickedBtnPdf2tiff()
 			FSDK_FinalizeLibrary();
 			return ;
 		}
-		FS_RESULT ret;
 		CString str = fileDlg.GetFileName();
 		CT2CA pszConvertedAnsiString (str);
 		std::string strStd (pszConvertedAnsiString);	
 		PDFConverter test;
-		test.Generate(strStd, 2);
+
+		int index=((CComboBox*)GetDlgItem(IDC_COMBO5))->GetCurSel();
+		CString Quality;
+		((CComboBox*)GetDlgItem(IDC_COMBO5))->GetLBText(index,Quality);
+		int QA =200;
+
+		if(Quality == "low") QA =200;
+		else if(Quality == "Medium") QA =700;
+		else if(Quality == "High") QA =1200;
+
+		test.Generate_QA_Img(strStd, 2, QA);
+
+		ShellExecute(this->m_hWnd,_T("open"),_T("Generated.tif"),NULL,NULL, SW_SHOW );
 		//Finalize PDF module.
 		FSDK_PDFModule_Finalize();
 		//Finalize SDK library.
@@ -290,12 +310,19 @@ void CsdktestDlg::OnBnClickedBtnDeletepage()
 			FSDK_FinalizeLibrary();
 			return ;
 		}
-		FS_RESULT ret;
 		CString str = fileDlg.GetFileName();
 		CT2CA pszConvertedAnsiString (str);
 		std::string strStd (pszConvertedAnsiString);	
 		PDFDocHandler test;
-		test.DocHandle(strStd, 1);
+		
+		int index=((CComboBox*)GetDlgItem(IDC_COMBO3))->GetCurSel();
+		CString Page_num;
+		((CComboBox*)GetDlgItem(IDC_COMBO3))->GetLBText(index,Page_num);
+		int bitcount=_wtoi(Page_num);	
+
+		test.DocHandle_Delete(strStd, bitcount);
+ 
+        ShellExecute(this->m_hWnd,_T("open"),_T("After_Delete.pdf"),NULL,NULL, SW_SHOW );
 		//Finalize PDF module.
 		FSDK_PDFModule_Finalize();
 		//Finalize SDK library.
@@ -333,7 +360,6 @@ void CsdktestDlg::OnBnClickedBtnIspdfa()
 			FSDK_FinalizeLibrary();
 			return ;
 		}
-		FS_RESULT ret;
 		CString str = fileDlg.GetFileName();
 		CT2CA pszConvertedAnsiString (str);
 		std::string strStd (pszConvertedAnsiString);	
@@ -376,7 +402,6 @@ void CsdktestDlg::OnBnClickedBtnGetbitmapinfo()
 			FSDK_FinalizeLibrary();
 			return ;
 		}
-		FS_RESULT ret;
 		CString str = fileDlg.GetFileName();
 		CT2CA pszConvertedAnsiString (str);
 		std::string strStd (pszConvertedAnsiString);	
@@ -419,12 +444,21 @@ void CsdktestDlg::OnBnClickedBtnPdf2bmp()
 			FSDK_FinalizeLibrary();
 			return ;
 		}
-		FS_RESULT ret;
 		CString str = fileDlg.GetFileName();
 		CT2CA pszConvertedAnsiString (str);
 		std::string strStd (pszConvertedAnsiString);	
 		PDFConverter test;
-		test.Generate(strStd, 6);
+
+		int index=((CComboBox*)GetDlgItem(IDC_COMBO5))->GetCurSel();
+		CString Quality;
+		((CComboBox*)GetDlgItem(IDC_COMBO5))->GetLBText(index,Quality);
+		int QA =200;
+		if(Quality == "low") QA =200;
+		else if(Quality == "Medium") QA =700;
+		else if(Quality == "High") QA =1200;
+		test.Generate_QA_Img(strStd, 6, QA);
+
+		ShellExecute(this->m_hWnd,_T("open"),_T("Generated.bmp"),NULL,NULL, SW_SHOW );
 		//Finalize PDF module.
 		FSDK_PDFModule_Finalize();
 		//Finalize SDK library.
@@ -461,12 +495,21 @@ void CsdktestDlg::OnBnClickedBtnPdf2png()
 			FSDK_FinalizeLibrary();
 			return ;
 		}
-		FS_RESULT ret;
 		CString str = fileDlg.GetFileName();
 		CT2CA pszConvertedAnsiString (str);
 		std::string strStd (pszConvertedAnsiString);	
 		PDFConverter test;
-		test.Generate(strStd, 7);
+
+		int index=((CComboBox*)GetDlgItem(IDC_COMBO5))->GetCurSel();
+		CString Quality;
+		((CComboBox*)GetDlgItem(IDC_COMBO5))->GetLBText(index,Quality);
+		int QA =200;
+		if(Quality == "low") QA =200;
+		else if(Quality == "Medium") QA =700;
+		else if(Quality == "High") QA =1200;
+		test.Generate_QA_Img(strStd, 7, QA);
+
+		ShellExecute(this->m_hWnd,_T("open"),_T("Generated.png"),NULL,NULL, SW_SHOW );
 		//Finalize PDF module.
 		FSDK_PDFModule_Finalize();
 		//Finalize SDK library.
@@ -503,12 +546,21 @@ void CsdktestDlg::OnBnClickedBtnPdf2jpg()
 			FSDK_FinalizeLibrary();
 			return ;
 		}
-		FS_RESULT ret;
 		CString str = fileDlg.GetFileName();
 		CT2CA pszConvertedAnsiString (str);
 		std::string strStd (pszConvertedAnsiString);	
 		PDFConverter test;
-		test.Generate(strStd, 8);
+
+		int index=((CComboBox*)GetDlgItem(IDC_COMBO5))->GetCurSel();
+		CString Quality;
+		((CComboBox*)GetDlgItem(IDC_COMBO5))->GetLBText(index,Quality);
+		int QA =200;
+		if(Quality == "low") QA =200;
+		else if(Quality == "Medium") QA =700;
+		else if(Quality == "High") QA =1200;
+		test.Generate_QA_Img(strStd, 8, QA);
+
+		ShellExecute(this->m_hWnd,_T("open"),_T("Generated.jpg"),NULL,NULL, SW_SHOW );
 		//Finalize PDF module.
 		FSDK_PDFModule_Finalize();
 		//Finalize SDK library.
@@ -545,12 +597,20 @@ void CsdktestDlg::OnBnClickedBtnPdf2jpx()
 			FSDK_FinalizeLibrary();
 			return ;
 		}
-		FS_RESULT ret;
 		CString str = fileDlg.GetFileName();
 		CT2CA pszConvertedAnsiString (str);
 		std::string strStd (pszConvertedAnsiString);	
 		PDFConverter test;
-		test.Generate(strStd, 9);
+
+		int index=((CComboBox*)GetDlgItem(IDC_COMBO5))->GetCurSel();
+		CString Quality;
+		((CComboBox*)GetDlgItem(IDC_COMBO5))->GetLBText(index,Quality);
+		int QA =200;
+		if(Quality == "low") QA =200;
+		else if(Quality == "Medium") QA =700;
+		else if(Quality == "High") QA =1200;
+		test.Generate_QA_Img(strStd, 9, QA);
+
 		//Finalize PDF module.
 		FSDK_PDFModule_Finalize();
 		//Finalize SDK library.
@@ -593,6 +653,9 @@ void CsdktestDlg::OnBnClickedBtnImg2pdfR90()
 		std::string strStd (pszConvertedAnsiString);	
 		PDFConverter test;
 		test.Generate(strStd, 10);
+		ShellExecute(this->m_hWnd,_T("open"),_T("output.pdf"),NULL,NULL, SW_SHOW );
+		FSDK_PDFModule_Finalize();
+		FSDK_FinalizeLibrary();
 	}
 	fileName.ReleaseBuffer();
 }
@@ -630,6 +693,9 @@ void CsdktestDlg::OnBnClickedBtnImg2pdfR180()
 		std::string strStd (pszConvertedAnsiString);	
 		PDFConverter test;
 		test.Generate(strStd, 11);
+		ShellExecute(this->m_hWnd,_T("open"),_T("output.pdf"),NULL,NULL, SW_SHOW );
+		FSDK_PDFModule_Finalize();
+		FSDK_FinalizeLibrary();
 	}
 	fileName.ReleaseBuffer();
 }
@@ -668,6 +734,9 @@ void CsdktestDlg::OnBnClickedBtnImg2pdfR270()
 		std::string strStd (pszConvertedAnsiString);	
 		PDFConverter test;
 		test.Generate(strStd, 12);
+		ShellExecute(this->m_hWnd,_T("open"),_T("output.pdf"),NULL,NULL, SW_SHOW );
+		FSDK_PDFModule_Finalize();
+		FSDK_FinalizeLibrary();
 	}
 	fileName.ReleaseBuffer();
 }
@@ -707,6 +776,9 @@ void CsdktestDlg::OnBnClickedBtnTrimpdf()
 		std::string strStd (pszConvertedAnsiString);	
 		PDFDocHandler test;
 		test.DocHandle(strStd, 3);
+		ShellExecute(this->m_hWnd,_T("open"),_T("Trim.pdf"),NULL,NULL, SW_SHOW );
+		FSDK_PDFModule_Finalize();
+		FSDK_FinalizeLibrary();
 	}
 	fileName.ReleaseBuffer();
 }
@@ -745,6 +817,10 @@ void CsdktestDlg::OnBnClickedBtnGetencrypt()
 		std::string strStd (pszConvertedAnsiString);	
 		PDFDocHandler test;
 		test.DocHandle(strStd, 4);
+		FSDK_PDFModule_Finalize();
+		FSDK_FinalizeLibrary();
+		Sleep(1000);
+		//ShellExecute(this->m_hWnd,_T("open"),_T("pfu_encrypt_output.pdf"),NULL,NULL, SW_SHOW );
 	}
 	fileName.ReleaseBuffer();
 }
@@ -824,4 +900,36 @@ void CsdktestDlg::OnBnClickedBtnSgdoc()
 		test.DocHandle(strStd, 5);
 	}
 	fileName.ReleaseBuffer();
+}
+
+
+
+
+
+void CsdktestDlg::OnCbnDropdownCombo3()
+{
+	// TODO: Add your control notification handler code here
+	int iCount=((CComboBox*)GetDlgItem(IDC_COMBO3))->GetCount();
+	CString strTemp;
+	if(iCount<1){
+		for(int i=0;i<=9;i++)
+		{
+		   strTemp.Format(L"%d",i);
+		   ((CComboBox*)GetDlgItem(IDC_COMBO3))->AddString(strTemp);
+		}
+  }
+
+}
+
+
+void CsdktestDlg::OnCbnDropdownCombo5()
+{
+	// TODO: Add your control notification handler code here
+	int iCount=((CComboBox*)GetDlgItem(IDC_COMBO5))->GetCount();
+
+	if(iCount<1){
+		((CComboBox*)GetDlgItem(IDC_COMBO5))->AddString(_T("High"));
+		((CComboBox*)GetDlgItem(IDC_COMBO5))->AddString(_T("Medium"));
+		((CComboBox*)GetDlgItem(IDC_COMBO5))->AddString(_T("Low"));
+	}
 }

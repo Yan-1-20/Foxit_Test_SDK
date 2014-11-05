@@ -12,6 +12,7 @@ public:
 	~PDFDocHandler(){}
 
 	FS_RESULT DocHandle(string strFileName, int ty);
+	FS_RESULT DocHandle_Delete(string strFileName, int DN);
 	FS_RESULT LoadPage(FSCRT_DOCUMENT doc, FS_INT32 index, FSCRT_PAGE *page )
 	{
 		FS_RESULT ret =  FSPDF_Doc_GetPage(doc, index, page);
@@ -53,7 +54,7 @@ public:
 		setvbuf(stdout, NULL, _IONBF, 0);
 	} 
 private:
-	FS_RESULT DeletePage(string strFile);
+	FS_RESULT DeletePage(string strFile, int DN);
 	FS_RESULT IsPDFA(string strFile);
 	FS_RESULT TrimPDF(string strFile);
 	FS_RESULT EncryPDF(string strFile);
