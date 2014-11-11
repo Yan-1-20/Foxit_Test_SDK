@@ -6,11 +6,11 @@
 #include <io.h>
 #include <fcntl.h>
 #include <stdio.h>
-
+#include "afxwin.h"
 
 FS_RESULT DeleteAndSave(string filename, int DN);
 FS_RESULT trimPDF(string strFile);
-FS_RESULT GenerateEncryptPDF(string strFile);
+FS_RESULT GenerateEncryptPDF(string strFile, string pwd);
 void SetDocInfo(string pdfName);
 void GetDocInfo(string pdfName);
 
@@ -20,6 +20,19 @@ const int Trim_a_PDF = 3;
 const int Encrypt_a_PDF = 4;
 const int SGDoc_a_PDF = 5;
 const int Get_Color_Space = 6;
+
+FS_RESULT PDFDocHandler::DocHandle_PWD(string strFileName, int type, string PWD)
+{
+	FS_RESULT ret = false;
+	switch (type){
+
+		case Encrypt_a_PDF:
+			ret = PDFDocHandler::EncryPDF(strFileName, PWD);
+			break;
+
+	}
+	return ret;
+}
 
 FS_RESULT PDFDocHandler::DocHandle(string strFileName, int type)
 {
@@ -34,9 +47,9 @@ FS_RESULT PDFDocHandler::DocHandle(string strFileName, int type)
 			ret = PDFDocHandler::TrimPDF(strFileName);
 			break;
 
-		case Encrypt_a_PDF:
+		/*case Encrypt_a_PDF:
 			ret = PDFDocHandler::EncryPDF(strFileName);
-			break;
+			break;*/
 
 		case SGDoc_a_PDF:
 			PDFDocHandler::SetGetTest(strFileName);
@@ -81,40 +94,49 @@ int PDFDocHandler::IsPDFA(string strFile)
 	ret = FSPDF_Doc_GetPDFAVersion(doc, &version);
 	
 	if(version == 0) {
-		InitConsoleWindow();
-		printf("The File Version is %d, The PDFA Version is PDFA_1A", file_version);
+		CString str;
+		str.Format(_T("The File Version is %d, The PDFA Version is PDFA_1A"), file_version);
+		AfxMessageBox(str);	
 	}
 	else if(version == 1) {
-		InitConsoleWindow();
-		printf("The File Version is %d, The PDFA Version is PDFA_1B", file_version);
+		CString str;
+		str.Format(_T("The File Version is %d, The PDFA Version is PDFA_1B"), file_version);
+		AfxMessageBox(str);	
 	}
 	else if(version == 2) {
-		InitConsoleWindow();
-		printf("The File Version is %d, The PDFA Version is PDFA_2A", file_version);
+		CString str;
+		str.Format(_T("The File Version is %d, The PDFA Version is PDFA_2A"), file_version);
+		AfxMessageBox(str);	
 	}
 	else if(version == 3) {
-		InitConsoleWindow();
-		printf("The File Version is %d, The PDFA Version is PDFA_2B", file_version);
+		CString str;
+		str.Format(_T("The File Version is %d, The PDFA Version is PDFA_2B"), file_version);
+		AfxMessageBox(str);	
 	}
 	else if(version == 4) {
-		InitConsoleWindow();
-		printf("The File Version is %d, The PDFA Version is PDFA_2U", file_version);
+		CString str;
+		str.Format(_T("The File Version is %d, The PDFA Version is PDFA_2U"), file_version);
+		AfxMessageBox(str);	
 	}
 	else if(version == 5) {
-		InitConsoleWindow();
-		printf("The File Version is %d, The PDFA Version is PDFA_3A", file_version);
+		CString str;
+		str.Format(_T("The File Version is %d, The PDFA Version is PDFA_3A"), file_version);
+		AfxMessageBox(str);	
 	}
 	else if(version == 6) {
-		InitConsoleWindow();
-		printf("The File Version is %d, The PDFA Version is PDFA_3B", file_version);
+		CString str;
+		str.Format(_T("The File Version is %d, The PDFA Version is PDFA_3B"), file_version);
+		AfxMessageBox(str);	
 	}
 	else if(version == 7) {
-		InitConsoleWindow();
-		printf("The File Version is %d, The PDFA Version is PDFA_3U", file_version);
+		CString str;
+		str.Format(_T("The File Version is %d, The PDFA Version is PDFA_3U"), file_version);
+		AfxMessageBox(str);	
 	}
 	else {
-		InitConsoleWindow();
-		printf("The File Version is %d, Not a PDFA file", file_version);
+		CString str;
+		str.Format(_T("The File Version is %d, Not a PDFA file"), file_version);
+		AfxMessageBox(str);
 	}
 	return ret;
 }
@@ -124,9 +146,9 @@ FS_RESULT PDFDocHandler::TrimPDF(string strFile)
 	return trimPDF(strFile);
 }
 
-FS_RESULT PDFDocHandler::EncryPDF(string strFile)
+FS_RESULT PDFDocHandler::EncryPDF(string strFile, string pwd)
 {
-	return GenerateEncryptPDF(strFile);
+	return GenerateEncryptPDF(strFile, pwd);
 }
 
 void PDFDocHandler::SetGetTest(string strFile)
@@ -144,7 +166,7 @@ FS_RESULT PDFDocHandler::GetColorSpace(string strFile)
 	FS_RESULT ret  = FSPDF_Doc_StartLoad(file, NULL, &doc, NULL);
 	if (FSCRT_ERRCODE_SUCCESS != ret)
 	{
-		printf("Failed to load PDF document\n");
+		AfxMessageBox(_T("Failed to load PDF document\n"));
 		return ret;
 	}
 
@@ -155,7 +177,7 @@ FS_RESULT PDFDocHandler::GetColorSpace(string strFile)
 	ret = GCS.LoadPage(doc, 0, &page);
 	if (FSCRT_ERRCODE_SUCCESS != ret)
 	{
-		printf("Failed to load a given page.\n");
+		AfxMessageBox(_T("Failed to load a given page.\n"));
 		return ret;
 	}
 
@@ -163,29 +185,30 @@ FS_RESULT PDFDocHandler::GetColorSpace(string strFile)
 	ret = FSPDF_Page_GetPageObjects(page, &pageObjs);
 	if (FSCRT_ERRCODE_SUCCESS != ret)
 	{
-		printf("Failed to get page objects.\n");
+		AfxMessageBox(_T("Failed to get page objects.\n"));
 		return ret;
 	}
 	FS_INT32 imageCount = 0;
 	ret = FSPDF_PageObjects_CountObjects(page, pageObjs, FSPDF_PAGEOBJECT_IMAGE, &imageCount);
 	if (FSCRT_ERRCODE_SUCCESS != ret)
 	{
-		printf("Failed to get the number of image objects.\n");
+		AfxMessageBox(_T("Failed to get the number of image objects.\n"));
 		return ret;
 	}
 	FSPDF_PAGEOBJECT pageObj = NULL;
 	ret = FSPDF_PageObjects_GetObject(page, pageObjs, FSPDF_PAGEOBJECT_IMAGE, 0, &pageObj);
 	if (FSCRT_ERRCODE_SUCCESS != ret)
 	{
-		printf("Failed to get an image object.\n");
+		AfxMessageBox(_T("Failed to get an image object.\n"));
 		return ret;
 	}
 	FS_INT32 colorspace =  0;
 	FS_RESULT ret_1 = FSPDF_ImageObject_GetColorSpace(page,pageObj, &colorspace);
     if (FSCRT_ERRCODE_SUCCESS == ret_1)
 	{
-		InitConsoleWindow();
-		printf("colorspace is %d", colorspace);
+		CString str;
+		str.Format(_T("colorspace is %d"), colorspace);
+		AfxMessageBox(str);	
 	}
 	FSPDF_Doc_Close(doc);
 	return ret;
@@ -301,7 +324,7 @@ FS_RESULT trimPDF(string strFile)
 	return ret;
 }
 
-FS_RESULT GenerateEncryptPDF(string strFile)
+FS_RESULT GenerateEncryptPDF(string strFile, string pwd)
 {
 	FSCRT_FILE file = FSDK_OpenFile(strFile.c_str(), "rb");
 
@@ -316,7 +339,14 @@ FS_RESULT GenerateEncryptPDF(string strFile)
 	//Set print permission, and user can set other permission
 	FS_DWORD permissions = FSPDF_PERMISSION_MODIFY ;
 	//Define user and owner password, it not need to call ::FSCRT_BStr_Clear to clear
-	FSCRT_BSTRC(userPwd,"foxit");
+	char* s2 = (char *)alloca(pwd.size());
+    memcpy(s2, pwd.c_str(), pwd.size());
+	
+	FSCRT_BSTR userPwd;
+	
+	FSCRT_BStr_Init(&userPwd);
+	FSCRT_BStr_Set(&userPwd, s2, pwd.size());
+
 	FSCRT_BSTRC(ownerPwd,"welcome");
 	//Encrypt the source PDF and save as a new file
 	string strEncryptFile = "pfu_encrypt_output.pdf";
@@ -423,18 +453,30 @@ void GetMetadata(FSCRT_DOCUMENT pdfDoc )
 
 	FS_RESULT ret = FSCRT_ERRCODE_ERROR;
 	int i = 0;
+	CString cstr;
 	for ( i = 0; i < 6; i++)
 	{
 		FSCRT_BSTR strMeta;
 		FSCRT_BStr_Init(&strMeta);
 		//Get the value in metadata
 		ret = FSPDF_Metadata_GetString(pdfDoc, &strItem[i], &strMeta);
-		PDFDocHandler test;
-		test.InitConsoleWindow();
+		
 		if (FSCRT_ERRCODE_SUCCESS == ret)
-			printf("Success: Get metadata \"%s\" value: %s.\r\n", strItem[i].str, strMeta.str);
+		{
+			CString str;
+			CString str_1 = strItem[i].str;
+			CString str_2 = strMeta.str;
+			str.Format(_T("Success: Get metadata %s value: %s.\n"), str_1, str_2);
+			cstr += str;
+		}
 		else
-			printf("Failure: Fail to get metadata\"%s\" value with error code %d.\r\n", strItem[i].str, ret);
+		{
+			CString str;
+			CString str_1 = strItem[i].str;
+			CString str_2 = strMeta.str;
+			str.Format(_T("Failure: Fail to get metadata\"%s\" value with error code %d.\r\n"), str_1, str_2);
+			cstr += str;
+		}
 		FSCRT_BStr_Clear(&strMeta);
 	}
 	
@@ -448,11 +490,22 @@ void GetMetadata(FSCRT_DOCUMENT pdfDoc )
 		//Get date time
 		ret = FSPDF_Metadata_GetDateTime(pdfDoc, &strItem[i], &datazone);
 		if (FSCRT_ERRCODE_SUCCESS == ret)
-			printf("Success: Get \"%s\" value: %d/%d/%d %d:%d:%d.\r\n", strItem[i].str, 
+		{
+			CString str;
+			CString str_1 = strItem[i].str;
+			str.Format(_T("Success: Get %s value: %d/%d/%d %d:%d:%d.\r\n"), str_1, 
 						datazone.year, datazone.month, datazone.day, datazone.hour, datazone.minute, datazone.second);
+			cstr += str;
+		}
 		else
-			printf("Failure: Fail to get \"%s\" value with error code %d.\r\n", strItem[i].str, ret);
+		{
+			CString str;
+			CString str_1 = strItem[i].str;
+			str.Format(_T("Failure: Fail to get \"%s\" value with error code %d.\r\n"), str_1, ret);
+			cstr += str;
+		}
 	}
+	AfxMessageBox(cstr);
 }
 
 void GetDocInfo(string pdfName)

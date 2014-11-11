@@ -28,7 +28,7 @@
 	/* Include MS VC header files, for Windows platforms. */
 
 	#if _MSC_VER >= 1200
-		#define _WIN32_WINNT 0x0501 //_WIN32_WINNT_WINXP
+		#define _WIN32_WINNT 0x0601 //_WIN32_WINNT_WINXP
 	#endif
 	#include <windows.h>
 	#include <direct.h>

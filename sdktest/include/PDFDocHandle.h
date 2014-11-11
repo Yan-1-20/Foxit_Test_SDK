@@ -12,6 +12,7 @@ public:
 	~PDFDocHandler(){}
 
 	FS_RESULT DocHandle(string strFileName, int ty);
+	FS_RESULT PDFDocHandler::DocHandle_PWD(string strFileName, int type, string PWD);
 	FS_RESULT DocHandle_Delete(string strFileName, int DN);
 	FS_RESULT LoadPage(FSCRT_DOCUMENT doc, FS_INT32 index, FSCRT_PAGE *page )
 	{
@@ -57,7 +58,7 @@ private:
 	FS_RESULT DeletePage(string strFile, int DN);
 	FS_RESULT IsPDFA(string strFile);
 	FS_RESULT TrimPDF(string strFile);
-	FS_RESULT EncryPDF(string strFile);
+	FS_RESULT EncryPDF(string strFile, string pwd);
 	void SetGetTest(string strFile);
 	FS_RESULT GetColorSpace(string strFile);
 	

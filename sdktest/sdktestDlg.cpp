@@ -14,6 +14,7 @@
 #include <io.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include "afxwin.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -64,6 +65,7 @@ CsdktestDlg::CsdktestDlg(CWnd* pParent /*=NULL*/)
 void CsdktestDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_EDIT1, m_edit1);
 }
 
 BEGIN_MESSAGE_MAP(CsdktestDlg, CDialogEx)
@@ -90,6 +92,7 @@ BEGIN_MESSAGE_MAP(CsdktestDlg, CDialogEx)
 	
 	ON_CBN_DROPDOWN(IDC_COMBO3, &CsdktestDlg::OnCbnDropdownCombo3)
 	ON_CBN_DROPDOWN(IDC_COMBO5, &CsdktestDlg::OnCbnDropdownCombo5)
+	ON_BN_CLICKED(IDC_BUTTON2, &CsdktestDlg::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -811,15 +814,21 @@ void CsdktestDlg::OnBnClickedBtnGetencrypt()
 			return ;
 		}
 		CString str = fileDlg.GetFileName();
-
 		fileName.ReleaseBuffer();
 		CT2CA pszConvertedAnsiString (str);
 		std::string strStd (pszConvertedAnsiString);	
+
+		CString s;
+		m_edit1.GetWindowText(s);
+		CT2CA pszName(s);
+		std::string m_NameStd(pszName); 
+
+
 		PDFDocHandler test;
-		test.DocHandle(strStd, 4);
+		test.DocHandle_PWD(strStd, 4, m_NameStd);
 		FSDK_PDFModule_Finalize();
 		FSDK_FinalizeLibrary();
-		Sleep(1000);
+		//Sleep(1000);
 		//ShellExecute(this->m_hWnd,_T("open"),_T("pfu_encrypt_output.pdf"),NULL,NULL, SW_SHOW );
 	}
 	fileName.ReleaseBuffer();
@@ -879,6 +888,9 @@ void CsdktestDlg::OnBnClickedBtnSgdoc()
 	fileDlg.GetOFN().lpstrFile = fileName.GetBuffer(c_cbBuffSize);
 	fileDlg.GetOFN().nMaxFile = c_cbBuffSize;
 
+
+	
+
 	if (fileDlg.DoModal() == IDOK)	{
 		if (!FSDK_InitializeLibray(true))
 		{
@@ -931,5 +943,26 @@ void CsdktestDlg::OnCbnDropdownCombo5()
 		((CComboBox*)GetDlgItem(IDC_COMBO5))->AddString(_T("High"));
 		((CComboBox*)GetDlgItem(IDC_COMBO5))->AddString(_T("Medium"));
 		((CComboBox*)GetDlgItem(IDC_COMBO5))->AddString(_T("Low"));
+	}
+}
+
+
+
+
+
+void CsdktestDlg::OnBnClickedButton2()
+{
+	CString s;
+	m_edit1.GetWindowText(s);
+	float x = _wtof(s);
+	if (x >= 0) {
+		x = sqrt(x);
+		s.Format(_T("%f"),sqrt(x));
+		m_edit1.SetWindowText(s);  
+	}
+	else {
+		MessageBox(_T("Please Enter a positive number"));
+		m_edit1.SetWindowText(_T(""));
+		m_edit1.SetFocus();
 	}
 }

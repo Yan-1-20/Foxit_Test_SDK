@@ -50,4 +50,6 @@ public:
 	afx_msg void OnBnClickedBtnSgdoc();
 	afx_msg void OnCbnDropdownCombo3();
 	afx_msg void OnCbnDropdownCombo5();
+	CEdit m_edit1;
+	afx_msg void OnBnClickedButton2();
 };
